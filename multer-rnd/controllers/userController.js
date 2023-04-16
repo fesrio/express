@@ -1,7 +1,8 @@
 const { json, app } = require("express");
 const { readFileSync } = require("fs");
 const path = require("path");
-const nodemailer = require("nodemailer")
+const sendMail = require("../utility/sendMail");
+const SendSms = require("../utility/sendSms");
 
 // Show user form
 const showUserForms = (req, res) => {
@@ -10,22 +11,9 @@ const showUserForms = (req, res) => {
 
 const storeUserData = (req, res) => {
 
-// Make transporter for sendin emails
-const transport = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: "587",
-  auth: {
-    user: "fuad.visuali@gmail.com",
-    pass: "wlitjrdazpxtwdhx"
-  }
-})
+  sendMail(req.body.email, "Welcome");
 
-transport.sendMail({
-  from: "fuad.visuali@gmail.com",
-  to: req.body.email,
-  subject: "Account confirmation",
-  text: `Hi ${req.body.name} your account is confirmed`
-});
+  SendSms(req.body.phone, `Hi ${req.body.name}, You are welcome to marn stack and your email is ${req.body.email} `)
 
   res.json(req.body);
 };
